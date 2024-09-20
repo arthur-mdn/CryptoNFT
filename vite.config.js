@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     basicSsl(),
   ],
-  server: {host: "10.102.135.185", port: 9000, https: true},
+  server: {https: true},
 })
