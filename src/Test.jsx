@@ -5,26 +5,44 @@ const MintNFTButton = () => {
     const [walletAddress, setWalletAddress] = useState('');
 
     const checkIfWalletIsConnected = async () => {
-        if (window.ethereum && window.ethereum.isOpera) {
-            try {
+        try {
+            if (window.solana && window.solana.isPhantom) {
+                const response = await window.solana.connect({ onlyIfTrusted: true });
+                setWalletConnected(true);
+                setWalletAddress(response.publicKey.toString());
+            } else {
+                console.log('Phantom Wallet non détecté.');
+            }
+        } catch (err) {
+            console.error('Erreur de connexion au Phantom Wallet:', err);
+        }
+        try {
+            if (window.ethereum && window.ethereum.isOpera) {
                 const response = await window.ethereum.request({method: 'eth_requestAccounts'});
                 setWalletConnected(true);
                 setWalletAddress(response[0]);
-            } catch (err) {
-                console.error('Erreur de connexion au portefeuille:', err);
+            } else {
+                console.log('Opera Wallet non détecté.');
             }
-        } else {
-            alert('Phantom Wallet non détecté. Veuillez l’installer pour continuer.');
+        } catch (err) {
+            console.error('Erreur de connexion au Opera Wallet:', err);
         }
     };
 
     const connectWallet = async () => {
         try {
+            const response = await window.solana.connect();
+            setWalletConnected(true);
+            setWalletAddress(response.publicKey.toString());
+        } catch (err) {
+            console.error('Erreur de connexion au Phantom Wallet:', err);
+        }
+        try {
             const response = await window.ethereum.request({method: 'eth_requestAccounts'});
             setWalletConnected(true);
             setWalletAddress(response[0]);
         } catch (err) {
-            console.error('Erreur de connexion au portefeuille:', err);
+            console.error('Erreur de connexion au Opera Wallet:', err);
         }
     };
 
