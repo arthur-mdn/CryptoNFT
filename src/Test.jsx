@@ -5,11 +5,11 @@ const MintNFTButton = () => {
     const [walletAddress, setWalletAddress] = useState('');
 
     const checkIfWalletIsConnected = async () => {
-        if (window.solana && window.solana.isPhantom) {
+        if (window.ethereum && window.ethereum.isOpera) {
             try {
-                const response = await window.solana.connect({ onlyIfTrusted: true });
+                const response = await window.ethereum.request({method: 'eth_requestAccounts'});
                 setWalletConnected(true);
-                setWalletAddress(response.publicKey.toString());
+                setWalletAddress(response[0]);
             } catch (err) {
                 console.error('Erreur de connexion au portefeuille:', err);
             }
@@ -20,9 +20,9 @@ const MintNFTButton = () => {
 
     const connectWallet = async () => {
         try {
-            const response = await window.solana.connect();
+            const response = await window.ethereum.request({method: 'eth_requestAccounts'});
             setWalletConnected(true);
-            setWalletAddress(response.publicKey.toString());
+            setWalletAddress(response[0]);
         } catch (err) {
             console.error('Erreur de connexion au portefeuille:', err);
         }
