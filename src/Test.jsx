@@ -11,6 +11,7 @@ const FloatingAlert = ({message, type, onClose}) => {
         return () => clearTimeout(timer);
     }, [onClose]);
 
+
     return (
         <div style={{
             position: 'fixed',
@@ -65,21 +66,27 @@ const MintNFTButton = () => {
     const [walletAddress, setWalletAddress] = useState('');
     const [provider, setProvider] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [selectedNFTIndex, setSelectedNFTIndex] = useState(0);
     const [alert, setAlert] = useState(null);
+    const [randomNFT, setRandomNFT] = useState(null);
 
-    const nftOptions = [
-        {
-            name: "My First NFT",
-            description: "This is my first NFT minted with Metaplex!",
-            uri: "https://ipfs.io/ipfs/QmNWqAaKigBptCTuDshapsxRKw6WtQGcavoKNMXVN8CFja",
-        },
-        {
-            name: "My Second NFT",
-            description: "This is my second NFT minted with Metaplex!",
-            uri: "https://ipfs.io/ipfs/QmVsE9ZNnJ3ZQ3fqUvNEnUjz1VZSbdmzCLBz29QAsxdcnn",
-        },
-    ];
+
+    // Array of NFT options
+    const nftCollection = {
+        name: "My Awesome NFT Collection",
+        description: "This is a collection of unique NFTs representing various themes.",
+        nfts: [
+            {
+                name: "My First NFT",
+                description: "This is my first NFT minted with Metaplex!",
+                uri: "https://ipfs.io/ipfs/QmNWqAaKigBptCTuDshapsxRKw6WtQGcavoKNMXVN8CFja",
+            },
+            {
+                name: "My Second NFT",
+                description: "This is my second NFT minted with Metaplex!",
+                uri: "https://ipfs.io/ipfs/QmVsE9ZNnJ3ZQ3fqUvNEnUjz1VZSbdmzCLBz29QAsxdcnn",
+            },
+        ]
+    };
 
     useEffect(() => {
         checkIfWalletIsConnected();
@@ -146,7 +153,14 @@ const MintNFTButton = () => {
         try {
             const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
             const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
-            const selectedNFT = nftOptions[selectedNFTIndex];
+
+            // Randomly select an NFT from the collection
+            const randomIndex = Math.floor(Math.random() * nftCollection.nfts.length);
+            const selectedNFT = nftCollection.nfts[randomIndex];
+
+            // Set the randomNFT state to the selected NFT
+            setRandomNFT(selectedNFT); // Update this line
+
             const {nft} = await metaplex.nfts().create({
                 name: selectedNFT.name,
                 description: selectedNFT.description,
@@ -161,6 +175,8 @@ const MintNFTButton = () => {
             setLoading(false);
         }
     };
+
+
 
     return (
         <div style={{maxWidth: '800px', margin: '0 auto', padding: '20px'}}>
@@ -206,53 +222,23 @@ const MintNFTButton = () => {
             ) : (
                 <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
                     <div style={{border: '1px solid #E5E7EB', borderRadius: '8px', padding: '20px'}}>
-                        <h3 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '10px'}}>Select an NFT to
-                            Mint</h3>
-                        <div style={{display: 'flex', gap: '20px'}}>
-                            {nftOptions.map((nft, index) => (
-                                <div
-                                    key={index}
-                                    onClick={() => setSelectedNFTIndex(index)}
-                                    style={{
-                                        cursor: 'pointer',
-                                        border: `2px solid ${selectedNFTIndex === index ? '#4F46E5' : '#E5E7EB'}`,
-                                        borderRadius: '8px',
-                                        padding: '10px',
-                                        flex: 1,
-                                        transition: 'all 0.3s ease'
-                                    }}
-                                >
-                                    <img
-                                        src={nft.uri}
-                                        alt={nft.name}
-                                        style={{
-                                            width: '100%',
-                                            height: '120px',
-                                            objectFit: 'cover',
-                                            borderRadius: '4px',
-                                            marginBottom: '10px'
-                                        }}
-                                    />
-                                    <p style={{fontWeight: 'bold', textAlign: 'center'}}>{nft.name}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div style={{border: '1px solid #E5E7EB', borderRadius: '8px', padding: '20px'}}>
                         <h3 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '10px'}}>NFT Preview</h3>
-                        <img
-                            src={nftOptions[selectedNFTIndex].uri}
-                            alt="NFT Preview"
-                            style={{
-                                height: '200px',
-                                objectFit: 'cover',
-                                borderRadius: '8px',
-                                marginBottom: '10px'
-                            }}
-                        />
-                        <h4 style={{fontWeight: 'bold'}}>{nftOptions[selectedNFTIndex].name}</h4>
-                        <p style={{color: '#6B7280'}}>{nftOptions[selectedNFTIndex].description}</p>
+                        {randomNFT && (
+                            <>
+                                <img
+                                    src={randomNFT.uri}
+                                    alt="Random NFT Preview"
+                                    style={{
+                                        height: '200px',
+                                        objectFit: 'cover',
+                                        borderRadius: '8px',
+                                        marginBottom: '10px'
+                                    }}
+                                />
+                                <h4 style={{fontWeight: 'bold'}}>{randomNFT.name}</h4>
+                                <p style={{color: '#6B7280'}}>{randomNFT.description}</p>
+                            </>
+                        )}
                         <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
                             <button
                                 onClick={mintNFT}
@@ -267,24 +253,46 @@ const MintNFTButton = () => {
                                     fontSize: '16px'
                                 }}
                             >
-                                {loading ? 'Minting...' : 'Mint NFT'}
+                                {loading ? 'Minting...' : 'Mint Random NFT'}
                             </button>
                             <button
                                 onClick={airDropHelper}
                                 disabled={loading}
                                 style={{
-                                    backgroundColor: 'white',
-                                    color: '#4F46E5',
+                                    backgroundColor: '#FBBF24',
+                                    color: 'white',
                                     padding: '10px 20px',
                                     borderRadius: '4px',
-                                    border: '1px solid #4F46E5',
+                                    border: 'none',
                                     cursor: 'pointer',
                                     fontSize: '16px'
                                 }}
                             >
-                                {loading ? 'Airdropping...' : 'Airdrop 1 SOL'}
+                                {loading ? 'Airdropping...' : 'Airdrop SOL'}
                             </button>
                         </div>
+                    </div>
+
+                    <div style={{border: '1px solid #E5E7EB', borderRadius: '8px', padding: '20px'}}>
+                        <h3 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '10px'}}>Collection Preview</h3>
+                        {nftCollection.nfts.map((nft, index) => (
+                            <div key={index} style={{marginBottom: '15px', display: 'flex', alignItems: 'center'}}>
+                                <img
+                                    src={nft.uri}
+                                    alt={`NFT ${nft.name}`}
+                                    style={{
+                                        height: '100px',
+                                        objectFit: 'cover',
+                                        borderRadius: '8px',
+                                        marginRight: '10px'
+                                    }}
+                                />
+                                <div>
+                                    <h4 style={{fontWeight: 'bold'}}>{nft.name}</h4>
+                                    <p style={{color: '#6B7280'}}>{nft.description}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )}

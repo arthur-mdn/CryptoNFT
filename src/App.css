@@ -7,8 +7,8 @@ body {
   /*background-color: #1D1E22 ; */
   font-family: sans-serif;
   display: flex;
-  margin: 0; /* Remove default body margin */
-  position: relative; /* Position relative for pseudo-element */
+  margin: 0;
+  position: relative;
   /*overflow: hidden; !* Ensure no overflow *!*/
 }
 
@@ -16,17 +16,11 @@ body::before {
   content: '';
   background-image: var(--bg-image);
   background-size: cover;
-  height: 100vh; /* Full viewport height */
-  width: 100vw; /* Full viewport width */
+  height: 99vh;
+  width: 99vw;
   position: absolute;
-  filter: blur(30px); /* Blur effect */
-  z-index: -1; /* Behind other content */
-}
-
-html, body, #root, .App {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+  filter: blur(30px);
+  z-index: -1;
 }
 
 #root {
@@ -34,7 +28,7 @@ html, body, #root, .App {
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-  position: relative; /* Ensure root is on top of the background */
+  position: relative;
 }
 
 .logo {
