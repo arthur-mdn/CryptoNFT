@@ -1,8 +1,40 @@
+:root {
+  /* Galaxy image from https://unsplash.com/s/photos/galaxy */
+  --bg-image: url('https://images.unsplash.com/photo-1538370965046-79c0d6907d47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80');
+}
+
+body {
+  /*background-color: #1D1E22 ; */
+  font-family: sans-serif;
+  display: flex;
+  margin: 0; /* Remove default body margin */
+  position: relative; /* Position relative for pseudo-element */
+  /*overflow: hidden; !* Ensure no overflow *!*/
+}
+
+body::before {
+  content: '';
+  background-image: var(--bg-image);
+  background-size: cover;
+  height: 100vh; /* Full viewport height */
+  width: 100vw; /* Full viewport width */
+  position: absolute;
+  filter: blur(30px); /* Blur effect */
+  z-index: -1; /* Behind other content */
+}
+
+html, body, #root, .App {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  position: relative; /* Ensure root is on top of the background */
 }
 
 .logo {
