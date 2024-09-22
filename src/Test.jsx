@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Connection, clusterApiUrl, PublicKey, LAMPORTS_PER_SOL} from '@solana/web3.js';
 import {Metaplex, walletAdapterIdentity} from '@metaplex-foundation/js';
+import pinataSDK from '@pinata/sdk';
 
 const FloatingAlert = ({message, type, onClose}) => {
     useEffect(() => {
@@ -10,7 +11,6 @@ const FloatingAlert = ({message, type, onClose}) => {
 
         return () => clearTimeout(timer);
     }, [onClose]);
-
 
     return (
         <div style={{
@@ -68,21 +68,29 @@ const MintNFTButton = () => {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState(null);
     const [randomNFT, setRandomNFT] = useState(null);
+    const [collectionId, setCollectionId] = useState(null);
 
-
-    // Array of NFT options
     const nftCollection = {
+        id: null,
         name: "My Awesome NFT Collection",
         description: "This is a collection of unique NFTs representing various themes.",
+        uri: "https://ipfs.io/ipfs/QmU9RzpWJQ3QFhD2bxvKURVFei4Nqv2HCA8uQDYUH5MABo",
+        sellerFeeBasisPoints: 1,
         nfts: [
             {
                 name: "My First NFT",
+                symbol: "",
+                seller_fee_basis_points: 1,
                 description: "This is my first NFT minted with Metaplex!",
+                creators: null,
                 uri: "https://ipfs.io/ipfs/QmNWqAaKigBptCTuDshapsxRKw6WtQGcavoKNMXVN8CFja",
             },
             {
                 name: "My Second NFT",
+                symbol: "",
+                seller_fee_basis_points: 1,
                 description: "This is my second NFT minted with Metaplex!",
+                creators: null,
                 uri: "https://ipfs.io/ipfs/QmVsE9ZNnJ3ZQ3fqUvNEnUjz1VZSbdmzCLBz29QAsxdcnn",
             },
         ]
@@ -143,6 +151,55 @@ const MintNFTButton = () => {
         }
     };
 
+    const createCollection = async () => {
+        if (!provider) {
+            showAlert('Please connect your Phantom wallet', 'error');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+            const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
+
+            if (!nftCollection.name || !nftCollection.description || !nftCollection.uri || nftCollection.sellerFeeBasisPoints === undefined) {
+                console.error('One or more properties of nftCollection are undefined:', nftCollection);
+                showAlert('An error occurred while creating the collection. Please check the console for more details.', 'error');
+                return;
+            }
+
+            const { nft } = await metaplex.nfts().create({
+                name: nftCollection.name,
+                description: nftCollection.description,
+                uri: nftCollection.uri,
+                sellerFeeBasisPoints: nftCollection.seller_fee_basis_points,
+                isCollection: true,
+            });
+
+            // setCollectionId(nft.address.toString());
+            // nftCollection.id = nft.address.toString();
+
+            const pinata = new pinataSDK('', '');
+
+            console.log('Created collection:', nftCollection);
+            showAlert(`Collection successfully created! Collection address: ${nft.address.toString()}`, 'success');
+
+            const pinataResponse = await pinata.pinJSONToIPFS(nftCollection);
+            if (pinataResponse.IpfsHash) {
+                console.log(`Collection data successfully uploaded to Pinata with hash: ${pinataResponse.IpfsHash}`);
+            } else {
+                console.error('Failed to upload collection data to Pinata');
+            }
+
+
+        } catch (error) {
+            console.error('Error creating collection:', error);
+            showAlert('An error occurred while creating the collection. Please try again.', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const mintNFT = async () => {
         if (!provider) {
             showAlert('Please connect your Phantom wallet', 'error');
@@ -154,20 +211,40 @@ const MintNFTButton = () => {
             const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
             const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
 
-            // Randomly select an NFT from the collection
             const randomIndex = Math.floor(Math.random() * nftCollection.nfts.length);
             const selectedNFT = nftCollection.nfts[randomIndex];
 
-            // Set the randomNFT state to the selected NFT
-            setRandomNFT(selectedNFT); // Update this line
+            setRandomNFT(selectedNFT);
 
-            const {nft} = await metaplex.nfts().create({
+            // Fetch the collection data from IPFS
+            const response = await fetch('https://ipfs.io/ipfs/QmQ41t7LM4HGM57GkqvwLPZ5LBjnGQYZy8rgDFtEF4KVJC');
+            const collectionData = await response.json();
+            const collectionId = collectionData.id;
+
+            let collectionNft;
+            try {
+                collectionNft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(collectionId) });
+            } catch (error) {
+                showAlert('Collection NFT does not exist. Please create it before minting the NFT.', 'error');
+                return;
+            }
+
+            const { nft } = await metaplex.nfts().create({
                 name: selectedNFT.name,
                 description: selectedNFT.description,
                 uri: selectedNFT.uri,
-                sellerFeeBasisPoints: 1,
+                sellerFeeBasisPoints: selectedNFT.seller_fee_basis_points,
+                collection: collectionNft.address,
             });
-            showAlert(`NFT successfully minted! Mint address: ${nft.address.toString()}`, 'success');
+
+            // await metaplex.nfts().verifyCollection({
+            //     mintAddress: nft.address,
+            //     collectionMintAddress: collectionNft.address,
+            //     isSizedCollection: true,
+            // });
+
+            console.log('Minted NFT:', nft);
+            showAlert(`NFT successfully minted and added to collection! Mint address: ${nft.address.toString()}`, 'success');
         } catch (error) {
             console.error('Error minting NFT:', error);
             showAlert('An error occurred while minting the NFT. Please try again.', 'error');
@@ -175,7 +252,6 @@ const MintNFTButton = () => {
             setLoading(false);
         }
     };
-
 
 
     return (
@@ -222,7 +298,7 @@ const MintNFTButton = () => {
             ) : (
                 <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
                     <div style={{border: '1px solid #E5E7EB', borderRadius: '8px', padding: '20px'}}>
-                        <h3 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '10px'}}>NFT Preview</h3>
+                        <h3 style={{fontSize: '18px', fontWeight: 'bold', marginBottom: '10px'}}>???</h3>
                         {randomNFT && (
                             <>
                                 <img
@@ -253,7 +329,7 @@ const MintNFTButton = () => {
                                     fontSize: '16px'
                                 }}
                             >
-                                {loading ? 'Minting...' : 'Mint Random NFT'}
+                                {loading ? 'Minting...' : 'Mint NFT'}
                             </button>
                             <button
                                 onClick={airDropHelper}
