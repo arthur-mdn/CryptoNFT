@@ -1,11 +1,11 @@
 import './App.css'
-import MintNFTButton from "./MintNFTButton.jsx";
+import Account from "./components/Account.jsx";
 
 function App() {
 
   return (
     <>
-      <MintNFTButton />
+      <Account />
     </>
   )
 }

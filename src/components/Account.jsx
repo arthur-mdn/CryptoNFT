@@ -1,9 +1,7 @@
-import {Fragment, useEffect, useState} from 'react';
-import axios from 'axios';
-import {clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, Transaction} from '@solana/web3.js';
-import {getOrCreateAssociatedTokenAccount, mintTo} from '@solana/spl-token';
+import {useEffect, useState} from 'react';
+import {clusterApiUrl, Connection, LAMPORTS_PER_SOL, PublicKey} from '@solana/web3.js';
 
-const MintNFTButton = () => {
+const Account = () => {
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
     const [provider, setProvider] = useState(null);
@@ -40,7 +38,7 @@ const MintNFTButton = () => {
         checkIfWalletIsConnected();
     }, []);
 
-    const airDropHelper = async () => {
+    const aidrop = async () => {
         try {
             setLoading(true);
             console.log("Airdrop en cours...");
@@ -74,14 +72,14 @@ const MintNFTButton = () => {
 
     return (
         <div style={{textAlign: 'center', marginTop: '50px'}}>
-            <h2>Mint NFT sur Solana</h2>
+            <h2>Account</h2>
             {walletConnected ? (
                 <>
                     <p>Portefeuille connecté: {walletAddress}</p>
                     <button
                         type={'button'}
                         disabled={loading}
-                        onClick={airDropHelper}
+                        onClick={aidrop}
                     >
                         Airdrop 1 SOL
                     </button>
@@ -109,4 +107,4 @@ const MintNFTButton = () => {
     );
 };
 
-export default MintNFTButton;
+export default Account;
