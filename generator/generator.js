@@ -4,6 +4,7 @@ import sharp from 'sharp';
 const layers = [
     { name: 'background', path: './layers/background/' },
     { name: 'friendly_cloud', path: './layers/friendly_cloud/', isStatic: true },
+    { name: 'diploma', path: './layers/diploma/' },
     { name: 'cap', path: './layers/cap/' },
     { name: 'pompon', path: './layers/pompon/' }
 ];
