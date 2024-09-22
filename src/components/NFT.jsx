@@ -33,7 +33,7 @@ const NFT = () => {
 
     return (
         <div className={"fc g1"}>
-            <CreateCollection nftCollection={nftCollection}/>
+            {/*<CreateCollection nftCollection={nftCollection}/>*/}
             <MintNFT nftCollection={nftCollection}/>
             <Gallery nftCollection={nftCollection}/>
         </div>
