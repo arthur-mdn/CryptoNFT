@@ -1,27 +1,12 @@
 import {useEffect, useState} from 'react';
 import {clusterApiUrl, Connection, LAMPORTS_PER_SOL, PublicKey} from '@solana/web3.js';
+import {useAuth} from "../AuthContext.jsx";
 
 const Account = () => {
-    const [walletConnected, setWalletConnected] = useState(false);
-    const [walletAddress, setWalletAddress] = useState('');
-    const [provider, setProvider] = useState(null);
+
     const [loading, setLoading] = useState(false);
     const [balance, setBalance] = useState(null);
-
-    const checkIfWalletIsConnected = async () => {
-        if (window.solana && window.solana.isPhantom) {
-            try {
-                const response = await window.solana.connect({onlyIfTrusted: true});
-                setWalletConnected(true);
-                setWalletAddress(response.publicKey.toString());
-                setProvider(window.solana);
-            } catch (err) {
-                console.error('Erreur de connexion au portefeuille:', err);
-            }
-        } else {
-            alert('Phantom Wallet non détecté. Veuillez l’installer pour continuer.');
-        }
-    };
+    const {walletConnected, setWalletConnected, walletAddress, setWalletAddress, provider, setProvider} = useAuth();
 
     const connectWallet = async () => {
         try {
@@ -33,10 +18,6 @@ const Account = () => {
             console.error('Erreur de connexion au portefeuille:', err);
         }
     };
-
-    useEffect(() => {
-        checkIfWalletIsConnected();
-    }, []);
 
     const aidrop = async () => {
         try {
