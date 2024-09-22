@@ -1,0 +1,4 @@
+output/images/*
+output/metadata/*
+!output/images/.gitkeep
+!output/metadata/.gitkeep
