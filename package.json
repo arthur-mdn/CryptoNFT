@@ -19,6 +19,7 @@
     "@solana/web3.js": "^1.95.3",
     "axios": "^1.7.7",
     "buffer": "^6.0.3",
+    "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
     "nft.storage": "^7.2.0",
     "prop-types": "^15.8.1",

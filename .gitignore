@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+uploader/.env
+uploader/output/*
+!uploader/output/.gitkeep
