@@ -1,5 +1,6 @@
 import Gallery from "./Gallery.jsx";
 import MintNFT from "./MintNFT.jsx";
+import CreateCollection from "./CreateCollection.jsx";
 
 const NFT = () => {
     const nftCollection = {
@@ -16,6 +17,7 @@ const NFT = () => {
                 description: "This is my first NFT minted with Metaplex!",
                 creators: null,
                 uri: "https://ipfs.io/ipfs/QmNWqAaKigBptCTuDshapsxRKw6WtQGcavoKNMXVN8CFja",
+                edition: 1
             },
             {
                 name: "My Second NFT",
@@ -24,12 +26,14 @@ const NFT = () => {
                 description: "This is my second NFT minted with Metaplex!",
                 creators: null,
                 uri: "https://ipfs.io/ipfs/QmVsE9ZNnJ3ZQ3fqUvNEnUjz1VZSbdmzCLBz29QAsxdcnn",
+                edition: 2,
             },
         ]
     };
 
     return (
         <div className={"fc g1"}>
+            {/*<CreateCollection nftCollection={nftCollection}/>*/}
             <MintNFT nftCollection={nftCollection}/>
             <Gallery nftCollection={nftCollection}/>
         </div>

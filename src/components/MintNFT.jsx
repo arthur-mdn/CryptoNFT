@@ -50,12 +50,19 @@ function MintNFT({nftCollection}) {
             }
 
             const { nft } = await metaplex.nfts().create({
-                name: selectedNFT.name,
+                name: `${selectedNFT.name} #${selectedNFT.edition}`,
                 description: selectedNFT.description,
                 uri: selectedNFT.uri,
                 sellerFeeBasisPoints: selectedNFT.seller_fee_basis_points,
                 collection: collectionNft.address,
             });
+
+            await metaplex.nfts().verifyCollection({
+                mintAddress: nft.address,
+                collectionMintAddress: collectionNft.address,
+                isSizedCollection: true,
+            });
+
 
             console.log('Minted NFT:', nft);
             toast.success(`NFT successfully minted and added to collection! Mint address: ${nft.address.toString()}`);
