@@ -1,4 +1,5 @@
 import {createContext, useContext, useEffect, useState} from 'react';
+import {clusterApiUrl, Connection, LAMPORTS_PER_SOL, PublicKey} from "@solana/web3.js";
 
 export const AuthContext = createContext();
 
@@ -6,6 +7,7 @@ export const AuthProvider = ({ children }) => {
     const [provider, setProvider] = useState(null);
     const [walletConnected, setWalletConnected] = useState(false);
     const [walletAddress, setWalletAddress] = useState('');
+    const [walletBalance, setWalletBalance] = useState(null);
 
     const checkIfWalletIsConnected = async () => {
         if (window.solana && window.solana.isPhantom) {
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ walletConnected, setWalletConnected, walletAddress, setWalletAddress, provider }}>
+        <AuthContext.Provider value={{ walletConnected, setWalletConnected, walletAddress, setWalletAddress, provider, walletBalance, setWalletBalance }}>
             {children}
         </AuthContext.Provider>
     );

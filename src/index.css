@@ -81,6 +81,90 @@ button:focus-visible {
 .ai-c{
   align-items: center;
 }
+.ai-fs{
+  align-items: flex-start;
+}
 .jc-c{
   justify-content: center;
+}
+.ai-fe{
+  align-items: flex-end;
+}
+.g0-5{
+  gap: 0.5rem;
+}
+.g1{
+  gap: 1rem;
+}
+.p1{
+  padding: 1rem;
+}
+.fw-b{
+  font-weight: bold;
+}
+.w100{
+  width: 100%;
+}
+
+
+.wallet-indicator{
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+}
+
+.wallet-indicator div{
+  padding: 10px 15px;
+  border-radius: 20px;
+  background-color: #4F46E5;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.wallet-indicator div span{
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: #10B981;
+}
+
+.wallet-indicator div img{
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.wallet-indicator p{
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 70vw;
+}
+
+.card{
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+}
+
+.collection-item h4{
+  margin: 0;
+}
+.collection-item img{
+  height: 5rem;
+  width: 5rem;
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+.collection-item p{
+  text-align: left;
+}
+
+img.nft{
+    height: 10rem;
+    width: 10rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
 }

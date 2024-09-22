@@ -1,18 +1,37 @@
-import {useEffect, useState} from 'react';
-import {clusterApiUrl, Connection, LAMPORTS_PER_SOL, PublicKey} from '@solana/web3.js';
-import {useAuth} from "../AuthContext.jsx";
+import Gallery from "./Gallery.jsx";
+import MintNFT from "./MintNFT.jsx";
 
 const NFT = () => {
-    const {walletConnected, setWalletConnected, walletAddress, setWalletAddress, provider, setProvider} = useAuth();
+    const nftCollection = {
+        id: null,
+        name: "My Awesome NFT Collection",
+        description: "This is a collection of unique NFTs representing various themes.",
+        uri: "https://ipfs.io/ipfs/QmU9RzpWJQ3QFhD2bxvKURVFei4Nqv2HCA8uQDYUH5MABo",
+        sellerFeeBasisPoints: 1,
+        nfts: [
+            {
+                name: "My First NFT",
+                symbol: "",
+                seller_fee_basis_points: 1,
+                description: "This is my first NFT minted with Metaplex!",
+                creators: null,
+                uri: "https://ipfs.io/ipfs/QmNWqAaKigBptCTuDshapsxRKw6WtQGcavoKNMXVN8CFja",
+            },
+            {
+                name: "My Second NFT",
+                symbol: "",
+                seller_fee_basis_points: 1,
+                description: "This is my second NFT minted with Metaplex!",
+                creators: null,
+                uri: "https://ipfs.io/ipfs/QmVsE9ZNnJ3ZQ3fqUvNEnUjz1VZSbdmzCLBz29QAsxdcnn",
+            },
+        ]
+    };
 
     return (
-        <div style={{textAlign: 'center', marginTop: '50px'}}>
-            <h2>NFT</h2>
-            {walletConnected ?? (
-                <>
-                    <p>Veuillez connecter votre portefeuille pour voir vos NFTs</p>
-                </>
-            )}
+        <div className={"fc g1"}>
+            <MintNFT nftCollection={nftCollection}/>
+            <Gallery nftCollection={nftCollection}/>
         </div>
     );
 };
