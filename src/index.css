@@ -42,7 +42,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #4CAF50;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -65,4 +65,22 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.fc{
+  display: flex;
+  flex-direction: column;
+}
+.fr{
+  display: flex;
+  flex-direction: row;
+}
+.jc-sb{
+  justify-content: space-between;
+}
+.ai-c{
+  align-items: center;
+}
+.jc-c{
+  justify-content: center;
 }
