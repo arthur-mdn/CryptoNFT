@@ -1,5 +1,5 @@
 import './App.css'
-import Account from "./components/Account.jsx";
+import Wallet from "./components/Wallet.jsx";
 import {AuthProvider, useAuth} from "./AuthContext.jsx";
 import ConnectWallet from "./components/ConnectWallet.jsx";
 import {ToastContainer} from 'react-toastify';
@@ -14,7 +14,7 @@ function AuthenticatedApp() {
             {walletConnected ? (
                 <div className={"fc g1"}>
                     <NFT />
-                    <Account />
+                    <Wallet />
                 </div>
             ) : (
                 <>
