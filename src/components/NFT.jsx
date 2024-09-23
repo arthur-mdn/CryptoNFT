@@ -36,7 +36,7 @@ const NFT = () => {
             {
                 candyMachine && candyMachine.items &&
                 <>
-                    <MintNFT candyMachine={candyMachine}/>
+                    <MintNFT candyMachine={candyMachine} reloadCandyMachine={getCandyMachine} />
                     <Gallery candyMachine={candyMachine}/>
                 </>
             }

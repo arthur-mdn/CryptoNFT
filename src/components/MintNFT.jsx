@@ -10,10 +10,9 @@ import {fetchMetadata} from "@metaplex-foundation/mpl-token-metadata";
 import { PublicKey } from "@solana/web3.js";
 import axios from "axios";
 
-// Constants
 const METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"); // Token Metadata Program ID
 
-const MintNFTNew = ({ candyMachine }) => {
+const MintNFTNew = ({ candyMachine, reloadCandyMachine }) => {
     const { walletAddress } = useAuth();
     const [minting, setMinting] = useState(false);
     const [nftInfo, setNftInfo] = useState(null);
@@ -93,6 +92,8 @@ const MintNFTNew = ({ candyMachine }) => {
 
             setNftInfo(metadata);
 
+            reloadCandyMachine();
+
             toast.success('NFT minted successfully!');
         } catch (error) {
             if (error.message.includes('Candy machine is empty')) {
@@ -134,6 +135,24 @@ const MintNFTNew = ({ candyMachine }) => {
                             <h3 className={"fw-b"}>{nftInfo.name}</h3>
                             <p>{nftInfo.symbol}</p>
                             <p className={'o0-5'}>{nftInfo.mint}</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            )}
+            {minting && (
+                <div className={"nft-minted-window"}>
+                    <div className={"content fr"}>
+                        <div className={"p2 pr"}>
+                            <div className="lds-ripple">
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+                        <div className={"fc g0 ai-fs pl0 jc-c"}>
+                            <h1 className={'fw-b'}>Veuillez patienter</h1>
+                            <h2 className={'fw-b o0-5'}>Nous vous transferons un NFT unique.</h2>
                         </div>
 
                     </div>
