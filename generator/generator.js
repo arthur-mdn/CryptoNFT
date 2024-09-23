@@ -1,5 +1,6 @@
 import fs from 'fs';
 import sharp from 'sharp';
+import path from "path";
 
 const layers = [
     { name: 'background', path: './layers/background/' },
@@ -19,7 +20,10 @@ function generateCombinations(layers) {
         }
 
         const layer = layers[layerIndex];
-        const elements = fs.readdirSync(layer.path);
+        const elements = fs.readdirSync(layer.path).filter(file => {
+            const ext = path.extname(file).toLowerCase();
+            return ext === '.png' || ext === '.jpg' || ext === '.jpeg';
+        });
 
         if (layer.isStatic) {
             currentCombination.push(elements[0]);
@@ -56,17 +60,7 @@ function generateMetadata(id, attributes) {
                     type: "image/png"
                 }
             ],
-            category: "image",
-            creators: [
-                {
-                    "address": "9tDq1bhd7hiQcW2H9rHoqHYEcuDCTFDrFb64N32ZbEL4",
-                    "share": 50
-                },
-                {
-                    "address": "64q9xpHGVB4EM3shnj2s5vKGLXjhmtcVjUh76JryrRDc",
-                    "share": 50
-                }
-            ]
+            category: "image"
         }
     };
 }
@@ -86,7 +80,14 @@ async function createImage(id, combination) {
 
         const imagePath = `${layer.path}${element}`;
 
-        attributes.push(element);
+        try {
+            await sharp(imagePath).metadata();
+            attributes.push(element);
+            composites.push({ input: imagePath, top: 0, left: 0 });
+        } catch (error) {
+            console.error(`Erreur lors de la préparation de l'image ${imagePath}: ${error.message}`);
+            continue;
+        }
 
         try {
             composites.push({ input: imagePath, top: 0, left: 0 });
