@@ -1,12 +1,12 @@
 import config from "../config.js";
 import {useEffect, useState} from "react";
 import {createUmi} from "@metaplex-foundation/umi-bundle-defaults";
-import {mplCandyMachine, fetchCandyMachine, mintFromCandyMachineV2} from "@metaplex-foundation/mpl-candy-machine";
+import {mplCandyMachine, mintFromCandyMachineV2} from "@metaplex-foundation/mpl-candy-machine";
 import {publicKey, createSignerFromKeypair, signerIdentity, transactionBuilder, generateSigner} from "@metaplex-foundation/umi";
 import { setComputeUnitLimit} from "@metaplex-foundation/mpl-toolbox";
 import {useAuth} from "../AuthContext.jsx";
 
-const MintNFTNew = ({candyMachine}) => {
+const MintNFT = ({candyMachine}) => {
     const {walletAddress} = useAuth();
     const [minting, setMinting] = useState(false);
     const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
@@ -73,4 +73,4 @@ const MintNFTNew = ({candyMachine}) => {
     );
 };
 
-export default MintNFTNew;
+export default MintNFT;
