@@ -34,7 +34,8 @@ body, h1, h2, h3, h4, h5, h6, p, a, ol, ul {
 }
 
 #root {
-  max-width: 1280px;
+  max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;

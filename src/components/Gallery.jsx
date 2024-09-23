@@ -20,13 +20,14 @@ function Gallery({candyMachine}) {
         <div>
             <div className={"p1 card fc g1"}>
                 <h3 className={'fw-b'}>Collection Gallery</h3>
-                <div className={"fc g1"}>
+                <div className={"fr g1 fw-w collection"}>
                     {nftData.map((nft, index) => (
-                        <div key={index} className={'collection-item fr g1'}>
+                        <div key={index} className={`collection-item fr g1`}>
                             <img src={nft.image} alt={`NFT ${nft.name}`}/>
-                            <div className={"fc ai-fs"}>
-                                <h4 className={'fw-b'}>{nft.name}</h4>
-                                {nft.minted && <p className={'minted'}>Minted</p>}
+                            <h4 className={'fw-b'}>{nft.name}</h4>
+                            {nft.minted && <p>Minted</p>}
+                            <div className={`${nft.minted ? 'minted' : ''}`}>
+                                <img src={'/ban.png'} alt={'Ban'}/>
                             </div>
                         </div>
                     ))}

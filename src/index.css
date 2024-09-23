@@ -1,169 +1,248 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
 }
+
 a:hover {
-  color: #535bf2;
+    color: #535bf2;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+    font-size: 3.2em;
+    line-height: 1.1;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #4CAF50;
-  cursor: pointer;
-  transition: border-color 0.25s;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #4CAF50;
+    cursor: pointer;
+    transition: border-color 0.25s;
 }
+
 button:hover {
-  border-color: #646cff;
+    border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+    outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+    }
 }
 
-.fc{
-  display: flex;
-  flex-direction: column;
+.fc {
+    display: flex;
+    flex-direction: column;
 }
-.fr{
-  display: flex;
-  flex-direction: row;
+
+.fr {
+    display: flex;
+    flex-direction: row;
 }
-.jc-sb{
-  justify-content: space-between;
+
+.fw-w{
+    flex-wrap: wrap;
 }
-.ai-c{
-  align-items: center;
+
+.jc-sb {
+    justify-content: space-between;
 }
-.ai-fs{
-  align-items: flex-start;
+
+.ai-c {
+    align-items: center;
 }
-.jc-c{
-  justify-content: center;
+
+.ai-fs {
+    align-items: flex-start;
 }
-.ai-fe{
-  align-items: flex-end;
+
+.jc-c {
+    justify-content: center;
 }
-.g0-5{
-  gap: 0.5rem;
+
+.ai-fe {
+    align-items: flex-end;
 }
-.g1{
-  gap: 1rem;
+
+.g0-5 {
+    gap: 0.5rem;
 }
-.p1{
-  padding: 1rem;
+
+.g1 {
+    gap: 1rem;
 }
-.fw-b{
-  font-weight: bold;
+
+.p1 {
+    padding: 1rem;
 }
-.w100{
-  width: 100%;
+
+.fw-b {
+    font-weight: bold;
+}
+
+.w100 {
+    width: 100%;
 }
 
 
-.wallet-indicator{
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 100;
-  pointer-events: none;
+.wallet-indicator {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 100;
+    pointer-events: none;
 }
 
-.wallet-indicator div{
-  padding: 10px 15px;
-  border-radius: 20px;
-  background-color: #4F46E5;
-  color: white;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.wallet-indicator div {
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #4F46E5;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.wallet-indicator div span{
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background-color: #10B981;
+.wallet-indicator div span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #10B981;
 }
 
-.wallet-indicator div img{
-  width: 1.5rem;
-  height: 1.5rem;
-}
-.wallet-indicator p{
-  text-wrap: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  max-width: 70vw;
+.wallet-indicator div img {
+    width: 1.5rem;
+    height: 1.5rem;
 }
 
-.card{
-  border: 1px solid #E5E7EB;
-  border-radius: 1rem;
+.wallet-indicator p {
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 70vw;
 }
 
-.collection-item h4{
-  margin: 0;
-}
-.collection-item img{
-  height: 5rem;
-  width: 5rem;
-  flex-shrink: 0;
-  object-fit: cover;
-  border-radius: 0.5rem;
-}
-.collection-item p{
-  text-align: left;
+.card {
+    border: 1px solid #E5E7EB;
+    border-radius: 1rem;
 }
 
-img.nft{
+.collection{
+    max-height: 550px;
+    overflow-y: scroll;
+
+}
+
+.collection-item {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.collection-item h4 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* gradient background */
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 100%);
+    padding: 1rem;
+    margin: 0;
+}
+
+.collection-item p {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(255, 0, 0, 0.8);
+    padding: 0.5rem;
+    margin: 0;
+    border-radius: 0 0 0 0.5rem;
+    z-index: 3;
+}
+
+.collection-item img {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.collection-item p {
+    text-align: left;
+}
+
+.collection-item .minted {
+    content: 'Minted';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 0.5rem;
+    margin: 0;
+    border-radius: 0.5rem 0 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed;
+}
+
+.collection-item .minted img {
+    width: 50%;
+    height: 50%;
+    filter: invert(1);
+    opacity: 0.5;
+}
+
+
+img.nft {
     height: 10rem;
     width: 10rem;
     object-fit: cover;
