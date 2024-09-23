@@ -222,6 +222,10 @@ button:focus-visible {
     margin: 0;
     border-radius: 0 0 0 0.5rem;
     z-index: 3;
+    backdrop-filter: blur(5px);
+}
+.collection-item.minted-by-you p {
+    background: rgba(0, 172, 0, 0.8);
 }
 
 .collection-item img {
@@ -236,7 +240,6 @@ button:focus-visible {
 }
 
 .collection-item .minted {
-    content: 'Minted';
     position: absolute;
     top: 0;
     left: 0;

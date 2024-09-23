@@ -18,6 +18,7 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
     const [nftInfo, setNftInfo] = useState(null);
     const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
     let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(config.secretKeyArray));
+    let mintedNfts = JSON.parse(localStorage.getItem('mintedNfts')) || [];
 
     const signer = createSignerFromKeypair(umi, keypair);
     umi.use(signerIdentity(signer));
@@ -93,6 +94,8 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
             setNftInfo(metadata);
 
             reloadCandyMachine();
+
+            localStorage.setItem('mintedNfts', JSON.stringify([...mintedNfts, metadata.uri]));
 
             toast.success('NFT minted successfully!');
         } catch (error) {
