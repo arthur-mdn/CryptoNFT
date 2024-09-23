@@ -59,7 +59,7 @@ const updateMetadataWithImageLinks = (metadataDir, imageHashes) => {
             const ipfsHash = imageHashes[imageName];
 
             if (ipfsHash) {
-                metadata.image = `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+                metadata.image = `https://ipfs.io/ipfs/${ipfsHash}`;
                 fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
                 console.log(`Updated metadata for ${metadataFile} with IPFS link.`);
             } else {
@@ -105,7 +105,7 @@ const main = async () => {
                     seller_fee_basis_points: metadata.seller_fee_basis_points || 0,
                     description: metadata.description,
                     creators: metadata.properties.creators || null,
-                    uri: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
+                    uri: `https://ipfs.io/ipfs/${ipfsHash}`,
                     image: metadata.image,
                     edition: index + 1,
                 };
@@ -117,7 +117,7 @@ const main = async () => {
         console.log('Collection metadata saved to collection.json');
 
         const collectionIpfsHash = await uploadFileToPinata(collectionPath);
-        collectionMetadata.uri = `https://gateway.pinata.cloud/ipfs/${collectionIpfsHash}`;
+        collectionMetadata.uri = `https://ipfs.io/ipfs/${collectionIpfsHash}`;
 
         fs.writeFileSync(collectionPath, JSON.stringify(collectionMetadata, null, 2));
         console.log('Collection URI updated in collection.json');
