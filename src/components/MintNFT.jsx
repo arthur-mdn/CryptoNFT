@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {Connection, clusterApiUrl, PublicKey} from '@solana/web3.js';
 import {Metaplex, walletAdapterIdentity} from '@metaplex-foundation/js';
-import pinataSDK from '@pinata/sdk';
 import {useAuth} from "../AuthContext.jsx";
 import {toast} from "react-toastify";
 import PropTypes from 'prop-types';
@@ -16,7 +15,7 @@ MintNFT.propTypes = {
     }).isRequired
 };
 
-function MintNFT() {
+function MintNFT({nftCollection}) {
     const { provider } = useAuth();
     const [randomNFT, setRandomNFT] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -32,7 +31,7 @@ function MintNFT() {
             const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
             const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
 
-            const response = await fetch('https://ipfs.io/ipfs/QmVJVZRSV19i3WfMsrdLd1Q5s68sLh1LTvENKxEhyzP4SS');
+            const response = await fetch(nftCollection.uri);
             const collectionData = await response.json();
             const randomIndex = Math.floor(Math.random() * collectionData.nfts.length);
             const selectedNFT = collectionData.nfts[randomIndex];
