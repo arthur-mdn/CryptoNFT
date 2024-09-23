@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { openDB } from 'idb';
+import {FaSpinner} from "react-icons/fa6";
 
 function Gallery({ candyMachine }) {
     const [nftData, setNftData] = useState([]);
@@ -9,7 +10,6 @@ function Gallery({ candyMachine }) {
     const itemsPerPage = 12; // Limite de 12 requêtes par page
     let mintedNfts = localStorage.getItem('mintedNfts') || [];
 
-    // Initialiser IndexedDB
     const initDB = async () => {
         return await openDB('nftGalleryDB', 1, {
             upgrade(db) {
@@ -20,14 +20,12 @@ function Gallery({ candyMachine }) {
         });
     };
 
-    // Fonction pour récupérer un NFT par URI depuis IndexedDB
     const getNftFromDB = async (db, uri) => {
         const tx = db.transaction('nfts', 'readonly');
         const store = tx.objectStore('nfts');
         return await store.get(uri);
     };
 
-    // Fonction pour ajouter un NFT dans IndexedDB
     const addNftToDB = async (db, nft) => {
         const tx = db.transaction('nfts', 'readwrite');
         const store = tx.objectStore('nfts');
@@ -43,10 +41,8 @@ function Gallery({ candyMachine }) {
         const itemsToLoad = candyMachine.items.slice(startIndex, endIndex);
 
         const data = await Promise.all(itemsToLoad.map(async (nft) => {
-            // Vérifier si le NFT est déjà dans IndexedDB
             let nftData = await getNftFromDB(db, nft.uri);
             if (!nftData) {
-                // Si le NFT n'est pas dans IndexedDB, faire la requête et l'ajouter
                 const response = await axios.get(nft.uri);
                 nftData = { ...nft, image: response.data.image };
                 await addNftToDB(db, nftData);
@@ -83,9 +79,9 @@ function Gallery({ candyMachine }) {
                     ))}
                 </div>
                 {loading ? (
-                    <p>Chargement...</p>
+                    <p className={"bungee fs1-5"}>Chargement...</p>
                 ) : (
-                    <button onClick={loadMore} className="load-more-btn">Charger plus</button>
+                    <button onClick={loadMore} className="load-more-btn bungee"><FaSpinner/>Charger la suite</button>
                 )}
             </div>
         </div>

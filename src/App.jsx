@@ -59,7 +59,10 @@ function AuthenticatedApp() {
                             candyMachine && candyMachine.items && (
                                 <>
                                 {walletConnected ? (
-                                        <MintNFT candyMachine={candyMachine} reloadCandyMachine={getCandyMachine}/>
+                                        <>
+                                            <MintNFT candyMachine={candyMachine} reloadCandyMachine={getCandyMachine}/>
+                                            <Wallet/>
+                                        </>
                                     ) : (
                                     <>
                                         <div className={"indicator"}>
@@ -110,9 +113,7 @@ function AuthenticatedApp() {
             <br/>
             {
                 candyMachine && candyMachine.items &&
-                <>
                 <Gallery candyMachine={candyMachine}/>
-                </>
             }
 
         </>

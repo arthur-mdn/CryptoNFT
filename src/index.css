@@ -35,7 +35,12 @@ h1 {
     font-size: 3.2em;
     line-height: 1.1;
 }
-
+.fs1 {
+    font-size: 1rem;
+}
+.fs1-5 {
+    font-size: 1.5rem;
+}
 button {
     border-radius: 8px;
     border: 1px solid transparent;
@@ -166,10 +171,22 @@ button:focus-visible {
     border-radius: 20px;
     background-color: #4F46E5;
     color: white;
-    font-size: 14px;
+    font-size: 1.5rem;
     display: flex;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.wallet-indicator div.not-interactive {
+    background-color: #1b1a42;
+    border: 2px solid #4F46E5;
+    color: white;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.wallet-indicator div p{
+    font-size: 1.25rem;
 }
 
 .wallet-indicator div:has(button) {

@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {clusterApiUrl, Connection, LAMPORTS_PER_SOL, PublicKey} from '@solana/web3.js';
 import {useAuth} from "../AuthContext.jsx";
 import {toast} from "react-toastify";
-import {FaArrowsRotate, FaCoins} from "react-icons/fa6";
+import {FaArrowsRotate, FaCoins, FaWallet} from "react-icons/fa6";
 
 const Wallet = () => {
     const [loading, setLoading] = useState(false);
@@ -55,9 +55,13 @@ const Wallet = () => {
 
     return (
         <div className={"wallet-indicator fc ai-fe g0-5"}>
-            <div className={"fr g0-5"}>
-                <span></span>
-                <p>Portefeuille connecté : {walletAddress}</p>
+            <div className={"fr g1 not-interactive"}>
+                <FaWallet/>
+                <p>{walletAddress}</p>
+            </div>
+            <div className={"fr g0-5 not-interactive"}>
+                <img src={'/solana.png'}/>
+                {walletBalance} SOL
             </div>
             <section className={"fr g0-5"}>
                 <div>
@@ -65,10 +69,6 @@ const Wallet = () => {
                 </div>
                 <div>
                     <button type={'button'} onClick={checkBalance} disabled={loading}><FaArrowsRotate/></button>
-                </div>
-                <div className={"fr g0-5"}>
-                    <img src={'/solana.png'}/>
-                    {walletBalance} SOL
                 </div>
             </section>
         </div>
