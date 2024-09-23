@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 const NFT = () => {
-    const nftUrl = 'https://gateway.pinata.cloud/ipfs/QmR6zEuBo5CDxYbqRa6NHqPGh3G2jZanPt6HFKMwZhpsqx'
+    const nftUrl = 'https://ipfs.io/ipfs/QmR6zEuBo5CDxYbqRa6NHqPGh3G2jZanPt6HFKMwZhpsqx'
     const [nftCollection, setNftCollection] = useState(null);
 
     useEffect(() => {
