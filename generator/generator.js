@@ -59,8 +59,12 @@ function generateMetadata(id, attributes) {
             category: "image",
             creators: [
                 {
-                    address: "WALLET_ADDRESS",
-                    share: 100
+                    "address": "9tDq1bhd7hiQcW2H9rHoqHYEcuDCTFDrFb64N32ZbEL4",
+                    "share": 50
+                },
+                {
+                    "address": "64q9xpHGVB4EM3shnj2s5vKGLXjhmtcVjUh76JryrRDc",
+                    "share": 50
                 }
             ]
         }

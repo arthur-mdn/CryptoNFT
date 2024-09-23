@@ -5,7 +5,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 const NFT = () => {
-    const nftId = 'QmQkwmfFysdCnfjmZQMjomdQGEM46TMKZwpJ4nausPe5qq'
+    const nftId = 'QmSNgA6j77sViapVLuqBAZ4ie5KWMQVPpFj3oSjxyT5BBs'
     const [nftCollection, setNftCollection] = useState(null);
 
     useEffect(() => {
