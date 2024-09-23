@@ -26,7 +26,7 @@ function Gallery({candyMachine}) {
                         <div key={index} className={`collection-item fr g1 ${mintedNfts.includes(nft.uri) ? 'minted-by-you' : ''}`}>
                             <img src={nft.image} alt={`NFT ${nft.name}`}/>
                             <h4 className={'fw-b'}>{nft.name}</h4>
-                            {nft.minted && <p>{mintedNfts.includes(nft.uri) ? 'À vous' : 'Déjà récupéré'}</p>}
+                            {nft.minted && <p>{mintedNfts.includes(nft.uri) ? 'Dans votre portefeuille' : 'Déjà récupéré'}</p>}
                             <div className={`${nft.minted ? 'minted' : ''}`}>
                                 <img src={'/ban.png'} alt={'Ban'}/>
                             </div>
