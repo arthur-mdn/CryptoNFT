@@ -6,29 +6,18 @@ import {publicKey, createSignerFromKeypair, signerIdentity, transactionBuilder, 
 import { setComputeUnitLimit} from "@metaplex-foundation/mpl-toolbox";
 import {useAuth} from "../AuthContext.jsx";
 
-const MintNFTNew = () => {
+const MintNFTNew = ({candyMachine}) => {
     const {walletAddress} = useAuth();
     const [minting, setMinting] = useState(false);
     const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
-    const [remainingUnits, setRemainingUnits] = useState(null);
-    console.log(config)
     let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(config.secretKeyArray));
 
     const signer = createSignerFromKeypair(umi, keypair);
 
     umi.use(signerIdentity(signer));
-    const [candyMachine, setCandyMachine] = useState(null);
 
-    const getCandyMachine = async () => {
-        const candyMachinePublicKey = publicKey(config.candyMachineId);
-        const fetchedCandyMachine = await fetchCandyMachine(umi, candyMachinePublicKey);
-        setCandyMachine(fetchedCandyMachine);
-        console.log('Candy Machine data:', fetchedCandyMachine);
-    }
+    const [remainingUnits, setRemainingUnits] = useState(null);
 
-    useEffect(() => {
-        getCandyMachine();
-    }, []);
 
     useEffect(() => {
         if (candyMachine && candyMachine.items) {
