@@ -26,6 +26,7 @@ function CreateCollection({nftCollection}) {
                 return;
             }
 
+            // Créer le NFT de collection
             const { nft } = await metaplex.nfts().create({
                 name: nftCollection.name,
                 description: nftCollection.description,
@@ -34,7 +35,9 @@ function CreateCollection({nftCollection}) {
                 isCollection: true,
             });
 
-            const pinata = new pinataSDK('', '');
+            nftCollection.id = nft.address.toString();
+
+            const pinata = new pinataSDK('8923aa66e31b89f372ea', '9d58d8384fcc4b065d79dc1d7b880ddfa664e3c6057b814300b38f0bb7d38618');
 
             console.log('Created collection:', nftCollection);
             toast.success(`Collection successfully created! Collection address: ${nft.address.toString()}`);

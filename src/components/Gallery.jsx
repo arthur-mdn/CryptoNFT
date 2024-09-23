@@ -17,7 +17,7 @@ function Gallery({nftCollection}) {
                 <div className={"fc g1"}>
                     {nftCollection.nfts && nftCollection.nfts.map((nft, index) => (
                         <div key={index} className={'collection-item fr g1'}>
-                            <img src={nft.uri} alt={`NFT ${nft.name}`}/>
+                            <img src={nft.image} alt={`NFT ${nft.name}`}/>
                             <div className={"fc ai-fs"}>
                                 <h4 className={'fw-b'}>{nft.name}</h4>
                                 <p style={{color: '#6B7280'}}>{nft.description}</p>

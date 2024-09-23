@@ -13,7 +13,7 @@ const uploadFileToPinata = async (filePath) => {
     const readableStreamForFile = fs.createReadStream(filePath);
     const options = {
         pinataMetadata: {
-            name: fileName, // Nom du fichier à utiliser comme métadonnées
+            name: fileName,
         },
     };
 
@@ -92,7 +92,7 @@ const main = async () => {
 
         const collectionMetadata = {
             id: null,
-            name: "My Awesome NFT Collection designed for MDS",
+            name: "MDS NFT Collection",
             description: "This is a collection of unique NFTs representing a cute cloud being diplomed from MDS.",
             uri: "",
             sellerFeeBasisPoints: 500,
@@ -106,6 +106,7 @@ const main = async () => {
                     description: metadata.description,
                     creators: metadata.properties.creators || null,
                     uri: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
+                    image: metadata.image,
                     edition: index + 1,
                 };
             })

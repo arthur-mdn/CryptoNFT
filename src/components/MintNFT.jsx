@@ -16,7 +16,7 @@ MintNFT.propTypes = {
     }).isRequired
 };
 
-function MintNFT({nftCollection}) {
+function MintNFT() {
     const { provider } = useAuth();
     const [randomNFT, setRandomNFT] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -32,14 +32,12 @@ function MintNFT({nftCollection}) {
             const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
             const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
 
-            const randomIndex = Math.floor(Math.random() * nftCollection.nfts.length);
-            const selectedNFT = nftCollection.nfts[randomIndex];
-
-            setRandomNFT(selectedNFT);
-
-            const response = await fetch('https://ipfs.io/ipfs/QmQ41t7LM4HGM57GkqvwLPZ5LBjnGQYZy8rgDFtEF4KVJC');
+            const response = await fetch('https://ipfs.io/ipfs/QmVJVZRSV19i3WfMsrdLd1Q5s68sLh1LTvENKxEhyzP4SS');
             const collectionData = await response.json();
+            const randomIndex = Math.floor(Math.random() * collectionData.nfts.length);
+            const selectedNFT = collectionData.nfts[randomIndex];
             const collectionId = collectionData.id;
+            setRandomNFT(selectedNFT);
 
             let collectionNft;
             try {
@@ -80,7 +78,7 @@ function MintNFT({nftCollection}) {
                     {randomNFT ? (
                         <>
                             <img
-                                src={randomNFT.uri}
+                                src={randomNFT.image}
                                 className={"nft"}
                                 alt="Random NFT Preview"
                             />
