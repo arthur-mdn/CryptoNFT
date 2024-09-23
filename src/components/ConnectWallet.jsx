@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useAuth} from "../AuthContext.jsx";
+import {FaLink} from "react-icons/fa6";
 
 const ConnectWallet = () => {
 
@@ -21,15 +22,15 @@ const ConnectWallet = () => {
     };
 
     return (
-        <div style={{textAlign: 'center', marginTop: '50px'}}>
-            <button
-                type={'button'}
-                disabled={loading}
-                onClick={tryToConnectWallet}
-            >
-                Connecter le portefeuille Phantom
-            </button>
-        </div>
+        <button
+            type={'button'}
+            className={"bungee"}
+            disabled={loading}
+            onClick={tryToConnectWallet}
+        >
+            <FaLink/>
+            Connecter le portefeuille Phantom
+        </button>
     );
 };
 

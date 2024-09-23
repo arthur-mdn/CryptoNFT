@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bungee&display=swap');
+
 :root {
   /* Galaxy image from https://unsplash.com/s/photos/galaxy */
   --bg-image: url('https://images.unsplash.com/photo-1538370965046-79c0d6907d47?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80');
+}
+
+.bungee {
+  font-family: "Bangers", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {

@@ -9,10 +9,11 @@ import {toast} from "react-toastify";
 import {fetchMetadata} from "@metaplex-foundation/mpl-token-metadata";
 import {PublicKey} from "@solana/web3.js";
 import axios from "axios";
+import {FaGift} from "react-icons/fa6";
 
 const METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"); // Token Metadata Program ID
 
-const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
+const MintNFT = ({candyMachine, reloadCandyMachine}) => {
     const {walletAddress} = useAuth();
     const [minting, setMinting] = useState(false);
     const [nftInfo, setNftInfo] = useState(null);
@@ -22,15 +23,6 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
 
     const signer = createSignerFromKeypair(umi, keypair);
     umi.use(signerIdentity(signer));
-
-    const [remainingUnits, setRemainingUnits] = useState(null);
-
-    useEffect(() => {
-        if (candyMachine && candyMachine.items) {
-            const mintedItems = Array.from(candyMachine.items.values()).filter(item => item.minted);
-            setRemainingUnits(candyMachine.items.length - mintedItems.length);
-        }
-    }, [candyMachine]);
 
     const getMetadataAddress = (mint) => {
         const [metadataAddress] = PublicKey.findProgramAddressSync(
@@ -118,22 +110,10 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
     }
 
     return (
-        <div>
-            {
-                remainingUnits !== null && (
-                    remainingUnits === 1 ? (
-                            <h3>Il reste 1 seul NFT de disponible !</h3>
-                        ) :
-                        remainingUnits === 0 ? (
-                            <h3>Tous les NFTs ont été récupérés</h3>
-
-                        ) : (
-                            <h3>Il reste {remainingUnits} NFTs disponibles.</h3>
-                        )
-                )
-            }
-            <button onClick={mint} disabled={minting}>
-                {minting ? 'Récupération d\'un NFT unique...' : 'Récupérer mon NFT unique'}
+        <div className={"fc g0-5 ai-fs"}>
+            <button onClick={mint} disabled={minting} className={"bungee"}>
+                <FaGift/>
+                {minting ? 'Récupération d\'un NFT...' : 'Récupérer mon NFT'}
             </button>
             {nftInfo && (
                 <div className={"nft-minted-window"}>
@@ -141,11 +121,10 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
                     <div className={"content fr"}>
                         <img src={nftInfo.image} alt={nftInfo.name}/>
                         <div className={"fc ai-fs"}>
-                            <h1 className={'fw-b'}>Félicitations !</h1>
+                            <h1 className={'fw-b bungee'}>Félicitations !</h1>
                             <h2 className={'fw-b o0-5'}>Ce NFT est maintenant à vous.</h2>
                             <h2 className={'fw-b o0-5'}>Il a été transféré dans votre portefeuille.</h2>
                             <h3 className={"fw-b"}>{nftInfo.name}</h3>
-                            <p>{nftInfo.symbol}</p>
                             <p className={'o0-5'}>{nftInfo.mint}</p>
                         </div>
 
@@ -155,7 +134,7 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
             )}
             {minting && (
                 <div className={"nft-minted-window"}>
-                    <div className={"content fr"}>
+                    <div className={"content fr ai-c"}>
                         <div className={"p2 pr"}>
                             <div className="lds-ripple">
                                 <div></div>
@@ -163,16 +142,14 @@ const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
                             </div>
                         </div>
                         <div className={"fc g0 ai-fs pl0 jc-c"}>
-                            <h1 className={'fw-b'}>Veuillez patienter</h1>
-                            <h2 className={'fw-b o0-5'}>Nous vous transferons un NFT unique.</h2>
+                            <h1 className={'fw-b bungee'}>Veuillez patienter</h1>
+                            <h2 className={'fw-b o0-5'}>Nous vous transférons un NFT unique.</h2>
                         </div>
-
                     </div>
-
                 </div>
             )}
         </div>
     );
 };
 
-export default MintNFTNew;
+export default MintNFT;

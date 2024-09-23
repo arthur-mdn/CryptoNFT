@@ -20,7 +20,7 @@ function Gallery({candyMachine}) {
     return (
         <div>
             <div className={"p1 card fc g1"}>
-                <h3 className={'fw-b'}>Galerie de NFTs</h3>
+                <h3 className={'fw-b bungee'}>Galerie de NFTs</h3>
                 <div className={"fr g1 fw-w collection"}>
                     {nftData.map((nft, index) => (
                         <div key={index} className={`collection-item fr g1 ${mintedNfts.includes(nft.uri) ? 'minted-by-you' : ''}`}>
