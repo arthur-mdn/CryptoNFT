@@ -106,7 +106,7 @@ const main = async () => {
                     description: metadata.description,
                     creators: metadata.properties.creators || null,
                     uri: `https://ipfs.io/ipfs/${ipfsHash}`,
-                    image: metadata.image,
+                    image: metadata.image.replace(`https://gateway.pinata.cloud/ipfs/`, `https://ipfs.io/ipfs/`),
                     edition: index + 1,
                 };
             })

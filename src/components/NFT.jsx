@@ -5,14 +5,14 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 
 const NFT = () => {
-    const nftUrl = 'https://ipfs.io/ipfs/QmR6zEuBo5CDxYbqRa6NHqPGh3G2jZanPt6HFKMwZhpsqx'
+    const nftId = 'QmQkwmfFysdCnfjmZQMjomdQGEM46TMKZwpJ4nausPe5qq'
     const [nftCollection, setNftCollection] = useState(null);
 
     useEffect(() => {
-        axios.get(`${nftUrl}`)
+        axios.get(`https://ipfs.io/ipfs/${nftId}`)
             .then(res => {
                 setNftCollection(res.data)
-                setNftCollection({...res.data, uri: `${nftUrl}`})
+                setNftCollection({...res.data, uri: `https://ipfs.io/ipfs/${nftId}`})
             })
     }, []);
 
