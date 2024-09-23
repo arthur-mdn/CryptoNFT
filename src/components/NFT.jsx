@@ -13,6 +13,7 @@ const NFT = () => {
             .then(res => {
                 setNftCollection(res.data)
                 setNftCollection({...res.data, uri: `https://ipfs.io/ipfs/${nftId}`})
+                console.log(res.data)
             })
     }, []);
 
@@ -23,7 +24,7 @@ const NFT = () => {
                     {!nftCollection.id &&
                         <CreateCollection nftCollection={nftCollection}/>
                     }
-                    <MintNFT nftCollection={nftCollection}/>
+                    <MintNFT />
                     <Gallery nftCollection={nftCollection}/>
                 </>
             )}

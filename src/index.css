@@ -112,6 +112,7 @@ button:focus-visible {
   top: 1rem;
   right: 1rem;
   z-index: 100;
+  pointer-events: none;
 }
 
 .wallet-indicator div{

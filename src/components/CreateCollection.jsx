@@ -4,6 +4,7 @@ import {Metaplex, walletAdapterIdentity} from '@metaplex-foundation/js';
 import pinataSDK from '@pinata/sdk';
 import {useAuth} from "../AuthContext.jsx";
 import {toast} from "react-toastify";
+import config from "../config.js";
 
 function CreateCollection({nftCollection}) {
     const { provider } = useAuth();
@@ -33,11 +34,13 @@ function CreateCollection({nftCollection}) {
                 uri: nftCollection.uri,
                 sellerFeeBasisPoints: nftCollection.seller_fee_basis_points,
                 isCollection: true,
+                updateAuthority: provider.publicKey,
+                collectionAuthority: { address: provider.publicKey, share: 100 },
             });
 
             nftCollection.id = nft.address.toString();
 
-            const pinata = new pinataSDK('8923aa66e31b89f372ea', '9d58d8384fcc4b065d79dc1d7b880ddfa664e3c6057b814300b38f0bb7d38618');
+            const pinata = new pinataSDK(config.pinataApiKey, config.pinataSecretApiKey);
 
             console.log('Created collection:', nftCollection);
             toast.success(`Collection successfully created! Collection address: ${nft.address.toString()}`);

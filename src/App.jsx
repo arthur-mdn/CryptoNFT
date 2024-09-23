@@ -1,11 +1,11 @@
 import './App.css'
 import Account from "./components/Account.jsx";
-import NFT from "./components/NFT.jsx";
 import {AuthProvider, useAuth} from "./AuthContext.jsx";
 import ConnectWallet from "./components/ConnectWallet.jsx";
 import WalletIndicator from "./components/WalletIndicator.jsx";
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import NFT from "./components/NFT.jsx";
 
 function AuthenticatedApp() {
     const {walletConnected} = useAuth();

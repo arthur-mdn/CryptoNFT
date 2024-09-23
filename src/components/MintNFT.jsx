@@ -1,99 +1,87 @@
-import {useState} from 'react';
-import {Connection, clusterApiUrl, PublicKey} from '@solana/web3.js';
-import {Metaplex, walletAdapterIdentity} from '@metaplex-foundation/js';
+import config from "../config.js";
+import {useEffect, useState} from "react";
+import {createUmi} from "@metaplex-foundation/umi-bundle-defaults";
+import {mplCandyMachine, fetchCandyMachine, mintFromCandyMachineV2} from "@metaplex-foundation/mpl-candy-machine";
+import {publicKey, createSignerFromKeypair, signerIdentity, transactionBuilder, generateSigner} from "@metaplex-foundation/umi";
+import { setComputeUnitLimit} from "@metaplex-foundation/mpl-toolbox";
 import {useAuth} from "../AuthContext.jsx";
-import {toast} from "react-toastify";
-import PropTypes from 'prop-types';
 
-MintNFT.propTypes = {
-    nftCollection: PropTypes.shape({
-        nfts: PropTypes.arrayOf(PropTypes.shape({
-            uri: PropTypes.string.isRequired,
-            name: PropTypes.string.isRequired,
-            description: PropTypes.string
-        })).isRequired
-    }).isRequired
-};
+const MintNFTNew = () => {
+    const {walletAddress} = useAuth();
+    const [minting, setMinting] = useState(false);
+    const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
+    const [remainingUnits, setRemainingUnits] = useState(null);
+    console.log(config)
+    let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(config.secretKeyArray));
 
-function MintNFT({nftCollection}) {
-    const { provider } = useAuth();
-    const [randomNFT, setRandomNFT] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const signer = createSignerFromKeypair(umi, keypair);
 
-    const mintNFT = async () => {
-        if (!provider) {
-            toast.error('Please connect your Phantom wallet');
-            return;
+    umi.use(signerIdentity(signer));
+    const [candyMachine, setCandyMachine] = useState(null);
+
+    const getCandyMachine = async () => {
+        const candyMachinePublicKey = publicKey(config.candyMachineId);
+        const fetchedCandyMachine = await fetchCandyMachine(umi, candyMachinePublicKey);
+        setCandyMachine(fetchedCandyMachine);
+        console.log('Candy Machine data:', fetchedCandyMachine);
+    }
+
+    useEffect(() => {
+        getCandyMachine();
+    }, []);
+
+    useEffect(() => {
+        if (candyMachine && candyMachine.items) {
+            const mintedItems = Array.from(candyMachine.items.values()).filter(item => item.minted);
+            console.log('Minted items:', mintedItems);
+            setRemainingUnits(candyMachine.items.length - mintedItems.length);
         }
+    }, [candyMachine]);
 
-        setLoading(true);
+    const mint = async () => {
+        setMinting(true);
         try {
-            const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
-            const metaplex = Metaplex.make(connection).use(walletAdapterIdentity(provider));
+            console.log('Minting NFT...');
 
-            const response = await fetch(nftCollection.uri);
-            const collectionData = await response.json();
-            const randomIndex = Math.floor(Math.random() * collectionData.nfts.length);
-            const selectedNFT = collectionData.nfts[randomIndex];
-            const collectionId = collectionData.id;
-            setRandomNFT(selectedNFT);
+            const nftMint= generateSigner(umi);
+            const nftOwner = publicKey(walletAddress);
 
-            let collectionNft;
-            try {
-                collectionNft = await metaplex.nfts().findByMint({ mintAddress: new PublicKey(collectionId) });
-            } catch (error) {
-                toast.error('Collection NFT does not exist. Please create it before minting the NFT.');
-                return;
-            }
+            const response = await transactionBuilder()
+                .add(setComputeUnitLimit(umi, {units: 800_000}))
+                .add(
+                    mintFromCandyMachineV2(umi, {
+                        candyMachine: candyMachine.publicKey,
+                        mintAuthority: umi.identity,
+                        nftOwner,
+                        nftMint,
+                        collectionMint: candyMachine.collectionMint,
+                        collectionUpdateAuthority: candyMachine.mintAuthority
+                    })
+                )
+                .sendAndConfirm(umi);
 
-            const { nft } = await metaplex.nfts().create({
-                name: `${selectedNFT.name} #${selectedNFT.edition}`,
-                description: selectedNFT.description,
-                uri: selectedNFT.uri,
-                sellerFeeBasisPoints: selectedNFT.seller_fee_basis_points,
-                collection: collectionNft.address,
-            });
+            console.log(response);
 
-            await metaplex.nfts().verifyCollection({
-                mintAddress: nft.address,
-                collectionMintAddress: collectionNft.address,
-                isSizedCollection: true,
-            });
-
-
-            console.log('Minted NFT:', nft);
-            toast.success(`NFT successfully minted and added to collection! Mint address: ${nft.address.toString()}`);
+            console.log('NFT minted successfully (nope)');
         } catch (error) {
-            console.error('Error minting NFT:', error);
-            toast.error('An error occurred while minting the NFT. Please try again.');
+            console.error('Error:', error);
         } finally {
-            setLoading(false);
+            setMinting(false);
         }
-    };
+    }
+
     return (
         <div>
-            <div className={"p1 card fc g1"}>
-                <div className={"fc g1 ai-c"}>
-                    {randomNFT ? (
-                        <>
-                            <img
-                                src={randomNFT.image}
-                                className={"nft"}
-                                alt="Random NFT Preview"
-                            />
-                            <h4 style={{fontWeight: 'bold'}}>{randomNFT.name}</h4>
-                            <p style={{color: '#6B7280'}}>{randomNFT.description}</p>
-                        </>
-                    ) :
-                        <img src={"placeholder.png"} className={"nft"} alt="Random NFT Preview"/>
-                    }
-                    <button onClick={mintNFT} disabled={loading} type={'button'}>
-                        {loading ? 'Minting...' : 'Mint NFT'}
-                    </button>
-                </div>
-            </div>
+            {
+                remainingUnits !== null && (
+                    <p>Remaining units: {remainingUnits}</p>
+                )
+            }
+            <button onClick={mint} disabled={minting}>
+                {minting ? 'Minting...' : 'Mint NFT'}
+            </button>
         </div>
     );
-}
+};
 
-export default MintNFT;
+export default MintNFTNew;
