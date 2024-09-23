@@ -18,31 +18,50 @@ const uploadFileToPinata = async (filePath) => {
     };
 
     try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
         const result = await pinata.pinFileToIPFS(readableStreamForFile, options);
         console.log(`Uploaded ${fileName} to Pinata. IPFS Hash: ${result.IpfsHash}`);
         return result.IpfsHash;
     } catch (error) {
         console.error(`Error uploading ${fileName}:`, error.message);
+        throw error;
     }
+};
+
+const uploadFileToPinataWithRetry = async (filePath, retries = 5) => {
+    for (let i = 0; i < retries; i++) {
+        try {
+            return await uploadFileToPinata(filePath);
+        } catch (error) {
+            if (i < retries - 1 && error.message.includes('429')) {
+                console.log(`Retrying upload for ${filePath}... (${i + 1}/${retries})`);
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            } else {
+                console.error(`Failed to upload ${filePath} after ${retries} attempts.`);
+                break;
+            }
+        }
+    }
+    return null;
 };
 
 const uploadDirectoryToPinata = async (directoryPath) => {
     const files = fs.readdirSync(directoryPath);
     const ipfsHashes = {};
 
-    await Promise.all(files.map(async (file) => {
+    for (const file of files) {
         const filePath = path.join(directoryPath, file);
 
-        if (file.startsWith('.') || !file.endsWith('.png') && !file.endsWith('.json')) {
+        if (file.startsWith('.') || (!file.endsWith('.png') && !file.endsWith('.json'))) {
             console.warn(`Ignoring file: ${file}`);
-            return;
+            continue;
         }
 
-        const ipfsHash = await uploadFileToPinata(filePath);
+        const ipfsHash = await uploadFileToPinataWithRetry(filePath);
         if (ipfsHash) {
             ipfsHashes[file] = ipfsHash;
         }
-    }));
+    }
 
     return ipfsHashes;
 };
