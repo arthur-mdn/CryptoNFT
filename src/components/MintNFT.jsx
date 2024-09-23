@@ -1,19 +1,19 @@
 import config from "../config.js";
 import {useEffect, useState} from "react";
 import {createUmi} from "@metaplex-foundation/umi-bundle-defaults";
-import {mplCandyMachine, mintFromCandyMachineV2} from "@metaplex-foundation/mpl-candy-machine";
-import {publicKey, createSignerFromKeypair, signerIdentity, transactionBuilder, generateSigner} from "@metaplex-foundation/umi";
-import { setComputeUnitLimit } from "@metaplex-foundation/mpl-toolbox";
-import { useAuth } from "../AuthContext.jsx";
+import {mintFromCandyMachineV2, mplCandyMachine} from "@metaplex-foundation/mpl-candy-machine";
+import {createSignerFromKeypair, generateSigner, publicKey, signerIdentity, transactionBuilder} from "@metaplex-foundation/umi";
+import {setComputeUnitLimit} from "@metaplex-foundation/mpl-toolbox";
+import {useAuth} from "../AuthContext.jsx";
 import {toast} from "react-toastify";
 import {fetchMetadata} from "@metaplex-foundation/mpl-token-metadata";
-import { PublicKey } from "@solana/web3.js";
+import {PublicKey} from "@solana/web3.js";
 import axios from "axios";
 
 const METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"); // Token Metadata Program ID
 
-const MintNFTNew = ({ candyMachine, reloadCandyMachine }) => {
-    const { walletAddress } = useAuth();
+const MintNFTNew = ({candyMachine, reloadCandyMachine}) => {
+    const {walletAddress} = useAuth();
     const [minting, setMinting] = useState(false);
     const [nftInfo, setNftInfo] = useState(null);
     const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
@@ -44,7 +44,7 @@ const MintNFTNew = ({ candyMachine, reloadCandyMachine }) => {
     };
 
     useEffect(() => {
-        if(!nftInfo) {
+        if (!nftInfo) {
             return
         }
         if (nftInfo.image) {
@@ -66,7 +66,7 @@ const MintNFTNew = ({ candyMachine, reloadCandyMachine }) => {
             const nftOwner = publicKey(walletAddress);
 
             const response = await transactionBuilder()
-                .add(setComputeUnitLimit(umi, { units: 800_000 }))
+                .add(setComputeUnitLimit(umi, {units: 800_000}))
                 .add(
                     mintFromCandyMachineV2(umi, {
                         candyMachine: candyMachine.publicKey,
@@ -113,15 +113,24 @@ const MintNFTNew = ({ candyMachine, reloadCandyMachine }) => {
             setNftInfo(null);
         }
     }
+
     return (
         <div>
             {
                 remainingUnits !== null && (
-                    <p>Remaining units: {remainingUnits}</p>
+                    remainingUnits === 1 ? (
+                            <h3>Il reste 1 seul NFT de disponible !</h3>
+                        ) :
+                        remainingUnits === 0 ? (
+                            <h3>Tous les NFTs ont été récupérés</h3>
+
+                        ) : (
+                            <h3>Il reste {remainingUnits} NFTs disponibles.</h3>
+                        )
                 )
             }
             <button onClick={mint} disabled={minting}>
-                {minting ? 'Minting...' : 'Mint NFT'}
+                {minting ? 'Récupération d\'un NFT unique...' : 'Récupérer mon NFT unique'}
             </button>
             {nftInfo && (
                 <div className={"nft-minted-window"}>
