@@ -3,26 +3,24 @@ import {useEffect, useState} from "react";
 import {createUmi} from "@metaplex-foundation/umi-bundle-defaults";
 import {mplCandyMachine, mintFromCandyMachineV2} from "@metaplex-foundation/mpl-candy-machine";
 import {publicKey, createSignerFromKeypair, signerIdentity, transactionBuilder, generateSigner} from "@metaplex-foundation/umi";
-import { setComputeUnitLimit} from "@metaplex-foundation/mpl-toolbox";
-import {useAuth} from "../AuthContext.jsx";
+import { setComputeUnitLimit } from "@metaplex-foundation/mpl-toolbox";
+import { useAuth } from "../AuthContext.jsx";
+import {toast} from "react-toastify";
 
-const MintNFT = ({candyMachine}) => {
-    const {walletAddress} = useAuth();
+const MintNFTNew = ({ candyMachine }) => {
+    const { walletAddress } = useAuth();
     const [minting, setMinting] = useState(false);
     const umi = createUmi('https://api.devnet.solana.com').use(mplCandyMachine());
     let keypair = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(config.secretKeyArray));
 
     const signer = createSignerFromKeypair(umi, keypair);
-
     umi.use(signerIdentity(signer));
 
     const [remainingUnits, setRemainingUnits] = useState(null);
 
-
     useEffect(() => {
         if (candyMachine && candyMachine.items) {
             const mintedItems = Array.from(candyMachine.items.values()).filter(item => item.minted);
-            console.log('Minted items:', mintedItems);
             setRemainingUnits(candyMachine.items.length - mintedItems.length);
         }
     }, [candyMachine]);
@@ -32,11 +30,11 @@ const MintNFT = ({candyMachine}) => {
         try {
             console.log('Minting NFT...');
 
-            const nftMint= generateSigner(umi);
+            const nftMint = generateSigner(umi);
             const nftOwner = publicKey(walletAddress);
 
             const response = await transactionBuilder()
-                .add(setComputeUnitLimit(umi, {units: 800_000}))
+                .add(setComputeUnitLimit(umi, { units: 800_000 }))
                 .add(
                     mintFromCandyMachineV2(umi, {
                         candyMachine: candyMachine.publicKey,
@@ -49,11 +47,17 @@ const MintNFT = ({candyMachine}) => {
                 )
                 .sendAndConfirm(umi);
 
-            console.log(response);
+            console.log('Minting response:', response);
 
-            console.log('NFT minted successfully (nope)');
+            toast.success('NFT minted successfully!');
         } catch (error) {
-            console.error('Error:', error);
+            if(error.message.includes('Candy machine is empty')) {
+                toast.error('Candy machine is empty. No more NFTs can be minted.');
+            } else {
+                console.error('Error:', error);
+                toast.error(`Error: ${error.message}`);
+            }
+
         } finally {
             setMinting(false);
         }
@@ -73,4 +77,4 @@ const MintNFT = ({candyMachine}) => {
     );
 };
 
-export default MintNFT;
+export default MintNFTNew;
