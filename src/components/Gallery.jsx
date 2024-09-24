@@ -7,7 +7,7 @@ function Gallery({ candyMachine }) {
     const [nftData, setNftData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const itemsPerPage = 12; // Limite de 12 requêtes par page
+    const itemsPerPage = 15;
     let mintedNfts = localStorage.getItem('mintedNfts') || [];
 
     const initDB = async () => {
