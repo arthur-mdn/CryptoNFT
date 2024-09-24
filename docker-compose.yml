@@ -1,6 +1,8 @@
 services:
   CryptoNFT-client:
     image: cryptonft-client
+    build:
+      context: ./
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.CryptoNFT-client.rule=Host(`nft.mds.mondon.pro`)"
