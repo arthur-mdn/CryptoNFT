@@ -1,7 +1,5 @@
 services:
   CryptoNFT-client:
-    build:
-      context: ./client
     image: cryptonft-client
     labels:
       - "traefik.enable=true"
