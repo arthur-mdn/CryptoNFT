@@ -41,6 +41,7 @@ function Gallery({ candyMachine }) {
         const itemsToLoad = candyMachine.items.slice(startIndex, endIndex);
 
         const data = await Promise.all(itemsToLoad.map(async (nft) => {
+            nft.uri = nft.uri.replace('gateway.pinata.cloud', 'ipfs.io');
             let nftData = await getNftFromDB(db, nft.uri);
             if (!nftData) {
                 const response = await axios.get(nft.uri);
