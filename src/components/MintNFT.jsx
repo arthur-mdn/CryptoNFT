@@ -44,8 +44,9 @@ const MintNFT = ({candyMachine, reloadCandyMachine}) => {
             return
         }
         const fetchNftData = async () => {
-            const response = await axios.get(nftInfo.uri);
-            setNftInfo({...nftInfo, image: response.data.image});
+            const response = await axios.get(nftInfo.uri.replace('gateway.pinata.cloud', 'ipfs.io'));
+            const pinataToIpfs = response.data.image.replace('gateway.pinata.cloud', 'ipfs.io');
+            setNftInfo({...nftInfo, image: pinataToIpfs});
         };
         fetchNftData()
     }, [nftInfo]);
